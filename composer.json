@@ -1,0 +1,26 @@
+{
+    "name": "quill/post",
+    "description": "Quill authoring post management dashboard.",
+    "type": "library",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Summit Digital",
+            "email": "spci.redesign@gmail.com"
+        }
+    ],
+    "minimum-stability": "dev",
+    "require": {},
+    "autoload": {
+        "psr-4": {
+            "Quill\\Post\\": "src/"
+        }
+    },
+    "extra": {
+        "laravel": {
+            "providers": [
+                "Quill\\Post\\PostServiceProvider"
+            ]
+        }
+    }
+}

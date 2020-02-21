@@ -7,7 +7,7 @@ use Illuminate\Support\Arr;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Route;
 use Quill\Post\Models\Post;
-use Quill\Post\Resource\PostResource;
+
 use Vellum\Contracts\Resource;
 use Vellum\Contracts\Shortcode;
 use Illuminate\Support\Facades\Cookie;
@@ -18,11 +18,16 @@ class ArticleRecoShortcode implements Shortcode
     public $resource;
     public $data = [];
     public $params;
+    public $type;
+    public $widgetVal;
+    public $site;
+    public $element;
 
 
     public function __construct(Resource $resource)
     {
 		$this->resource = $resource;
+		$this->site = config('site');
     }
 
     public function transform($post)
@@ -47,7 +52,8 @@ class ArticleRecoShortcode implements Shortcode
             data-shortcode-listen="click"
             data-shortcode-multiple
             data-source=\''.trim($this->dataSource($post)).'\'
-            type="checkbox"
+            type="'.$this->element.'"
+            name="radio"
             value=\''.trim($this->transform($post)).'\'>';
     }
 
@@ -62,6 +68,7 @@ class ArticleRecoShortcode implements Shortcode
 
         return [
             'articleIds' => [],
+            'widget' => $this->widgetVal,
             // 'widget' => Cookie::get(),
             // 'image' => ""
         ];
@@ -80,8 +87,9 @@ class ArticleRecoShortcode implements Shortcode
         }
     }
 
-    public function view()
+    public function view($request)
     {
+    	$this->type = $request->get('type');
         $rows = $this->resource->getRowsData();
         $this->data['selected'] = $this->getCookieValue() ?? [];
         $this->data['collections'] = $this->resource->getRowsData();
@@ -91,33 +99,70 @@ class ArticleRecoShortcode implements Shortcode
             return $this->input($post);
         };
 
-        $this->data['attributes']['collections']['select'] = [
-            "id" => "select",
-            "name" => "Select",
+        switch ($this->type) {
+    		case 'multiple':
+    			$this->widgetVal = $this->site['in_article_label']['multiple'];
+    			$this->element = 'checkbox';
+    			break;
+
+    		default:
+    			$this->widgetVal = $this->site['in_article_label']['single'];
+    			$this->element = 'radio';
+    			break;
+    	}
+
+        $this->data['attributes']['collections'] = array_merge(['select' => [
+        	"id" => "select",
+            "name" => "",
             "element" => "checkbox",
             "relation" => "select",
             "modify" => $modify
-        ];
+        ]], $this->data['attributes']['collections']);
+
+        //modify is called in cell.blade.php; it's a callback
         $this->data['attributes']['relation']['select'] = 'select';
         $this->data['attributes']['modify']['select'] = $modify;
-        // dd($this->data['attributes']);
-        $this->data['actions'] = $this->resource->getActions();
+        $this->data['actions'] = ($this->resource->getModalActions()) ? $this->resource->getModalActions() : $this->resource->getActions();
         $this->data['page_title'] = 'In-Article Recommendations';
         $this->data['shortcode'] = $this->code();
+        $this->data['type'] = $this->type;
+        $this->data['widget_placeholder'] = $this->widgetVal;
+        $this->data['shortcode_route'] = route('article-reco.index');
 
         return view('post::articleReco', $this->data);
     }
 
     public function registerShortcodeCookie($request)
     {
-        $cookie = $this->getCookieValue();
-        $requestInput = $request->input('inputcode');
+    	$deleteAllCookie = $request->input('deleteAllCookie', 0);
+    	if ($deleteAllCookie) {
+    		$cookie = Cookie::forget($this->name);
+    		return response()->json([])->withCookie($cookie);
+    	}
 
-        if (isset($cookie->data)) {
-            $data = $cookie->data;
+        $cookie = $this->getCookieValue();
+        $data = $cookies = $dataRemoved = [];
+        $requestInput = $request->input('input');
+        $deleteCookie = $request->input('deleteCookie', 0);
+        $isRadio = $request->input('isRadio', 0);
+
+        if (isset($cookie->data) && !$isRadio) {
+            foreach ($cookie->data as $key => $item) {
+	        	$item = json_decode(json_encode($item), true);
+	        	if ($item[0]['id'] != $requestInput[0]['id']) {
+	        		$data[] = $item;
+	        	}
+	        }
         }
 
-        $data[] = $requestInput;
+        if ($requestInput) {
+        	if ($deleteCookie) {
+	        	$dataRemoved = reset($requestInput);
+	        	$dataRemoved = $dataRemoved['id'];
+	        } else {
+	        	$data[] = $requestInput;
+	        }
+        }
 
         $responseCookie = [
             'data' => $data,
@@ -128,6 +173,8 @@ class ArticleRecoShortcode implements Shortcode
             'name' => $this->name,
             'data' => $data,
             'shortcode' => $request->input('shortcode'),
+            'deleteCookie' => $deleteCookie,
+            'removedId' => $dataRemoved
         ], 200, [], JSON_NUMERIC_CHECK )
         ->withCookie(cookie($this->name, json_encode($responseCookie), 60));
     }
@@ -145,7 +192,7 @@ class ArticleRecoShortcode implements Shortcode
             'type' => 'menutime',
             'text' => 'post',
             'label' => 'In-Article Recommendations',
-            'url' => route('article-reco.index'),
+            'url' => route('article-reco.index', ['type' => 'single']),
             'icon' => '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" class="h-6 w-6 fill-current"><path class="heroicon-ui" d="M18 21H7a4 4 0 0 1-4-4V5c0-1.1.9-2 2-2h10a2 2 0 0 1 2 2h2a2 2 0 0 1 2 2v11a3 3 0 0 1-3 3zm-3-3V5H5v12c0 1.1.9 2 2 2h8.17a3 3 0 0 1-.17-1zm-7-3h4a1 1 0 0 1 0 2H8a1 1 0 0 1 0-2zm0-4h4a1 1 0 0 1 0 2H8a1 1 0 0 1 0-2zm0-4h4a1 1 0 0 1 0 2H8a1 1 0 1 1 0-2zm9 11a1 1 0 0 0 2 0V7h-2v11z"/></svg>'
         ];
 

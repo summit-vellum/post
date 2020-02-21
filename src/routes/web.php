@@ -17,7 +17,8 @@
 
 Route::group(['middleware' => 'web'], function() {
 
-    Route::resource('post/article-reco', 'App\Http\Controllers\ShortcodeController');
+    Route::resource('post/article-reco', 'Vellum\Controllers\ShortcodeController');
+
     // Route::resource('post', 'Vellum\Controllers\ResourceController');
 
     // Route::group(['prefix' => 'modal'], function(){

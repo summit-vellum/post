@@ -3,7 +3,7 @@
 namespace Quill\Post\Resource;
 
 use App\Http\Models\Section;
-use App\Http\Models\Type;
+use Vellum\Models\Type;
 use App\User;
 use Quill\Html\Fields\Datetime;
 use Quill\Html\Fields\ID;
@@ -27,7 +27,8 @@ class PostResource extends Post implements Formable
                 ->rules('required','unique:posts','max:255')
                 ->help('The ideal length of an article title is between 55-65 characters. This will appear in all widgets within the site.')
                 ->searchable()
-                ->sortable(),
+                ->sortable()
+                ->fieldSelected(),
 
             Textarea::make('Blurb')
                 ->help('Use a blurb to convey a short statement to accompany your title. This is displayed in the article page, as well as on Facebook and Twitter.')
@@ -90,6 +91,13 @@ class PostResource extends Post implements Formable
             new \Vellum\Actions\ViewAction,
             new \Vellum\Actions\DeleteAction,
             new \Quill\Post\Actions\PreviewAction,
+        ];
+    }
+
+    public function modalActions()
+    {
+        return [
+            new \Vellum\Actions\ViewAction
         ];
     }
 

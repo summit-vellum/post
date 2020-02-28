@@ -10,10 +10,15 @@ class Author extends Filter
 {
     protected function applyFilter(Builder $builder)
     {
-        return $builder->with('user')
-            ->whereHas('user', function($query){
-                $query->where('id',request($this->filterName()));
-            });
+
+    	if (request($this->filterName()) != null) {
+    		$builder->with('user')
+		            ->whereHas('user', function($query){
+		                $query->where('id',request($this->filterName()));
+		            });
+    	}
+
+        return $builder;
     }
 
     public function key()

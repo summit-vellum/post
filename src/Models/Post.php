@@ -31,4 +31,19 @@ class Post extends BaseModel
         return $this->belongsToMany(Tag::class)->using(PostTag::class);
     }
 
+    public function history()
+    {
+        return $this->morphOne('Quill\History\Models\History', 'historyable');
+    }
+
+    public function resourceLock()
+    {
+        return $this->morphOne('Vellum\Models\ResourceLock', 'resourceable');
+    }
+
+    public function autosaves()
+    {
+        return $this->morphOne('Vellum\Models\Autosaves', 'autosavable');
+    }
+
 }

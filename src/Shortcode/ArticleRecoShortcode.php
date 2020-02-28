@@ -40,7 +40,7 @@ class ArticleRecoShortcode implements Shortcode
         return json_encode([
             'id' => $post->id,
             'title' => $post->title,
-            'section' => $post->category->name,
+            'section' => isset($post->category) ? $post->category->name : '',
             'published_at' => \Carbon\Carbon::parse($post->published_at)->format('M d, y h:m A')
         ]);
     }
@@ -94,6 +94,15 @@ class ArticleRecoShortcode implements Shortcode
         $this->data['selected'] = $this->getCookieValue() ?? [];
         $this->data['collections'] = $this->resource->getRowsData();
         $this->data['attributes'] = $this->resource->getAttributes();
+
+        $searchables = [];
+        if (isset($this->data['attributes']['searchable'])) {
+        	foreach ($this->data['attributes']['searchable'] as $key => $searchable) {
+        		$searchables[] = $this->data['attributes']['name'][$searchable];
+        	}
+        }
+
+        $this->data['searchables'] = $searchables;
 
         $modify = function ($select, $post) {
             return $this->input($post);

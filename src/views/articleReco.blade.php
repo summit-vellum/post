@@ -42,7 +42,7 @@
 			</div>
 			<div class="row">
 				<h4>Recommended Article</h4>
-				@include('vellum::modal.search', ['placeholder' => 'Search for article id or title...', 'type' => $type])
+				@include('vellum::modal.search')
 				<div class="mb-3">
 					@if ($type == 'multiple')
 						@icon(['icon' => 'info', 'classes'=>'pull-left'])

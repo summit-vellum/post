@@ -10,10 +10,14 @@ class Section extends Filter
 {
 	protected function applyFilter(Builder $builder)
 	{
-		return $builder->with('category')
+		if (request($this->filterName()) != null) {
+			$builder->with('category')
             ->whereHas('category', function($query) {
                 $query->where($this->foreignKey(), request($this->filterName()));
             });
+		}
+
+		return $builder;
 	}
 
     public function apply(Builder $builder)

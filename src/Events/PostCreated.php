@@ -1,4 +1,4 @@
-<?php 
+<?php
 
 namespace Quill\Post\Events;
 
@@ -11,7 +11,7 @@ use Quill\Post\Models\Post;
 
 class PostCreated
 {
-    // use Dispatchable, InteractsWithSockets, 
+    // use Dispatchable, InteractsWithSockets,
     use SerializesModels;
 
     /**
@@ -19,7 +19,7 @@ class PostCreated
      *
      * @var \Illuminate\Contracts\Auth\Authenticatable
      */
-    public $post;
+    public $data;
 
     /**
      * Create a new event instance.
@@ -27,8 +27,8 @@ class PostCreated
      * @param  \Illuminate\Contracts\Auth\Authenticatable  $post
      * @return void
      */
-    public function __construct(Post $post)
+    public function __construct(Post $data)
     {
-        $this->post = $post;
+        $this->data = $data;
     }
 }

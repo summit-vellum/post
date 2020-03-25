@@ -5,14 +5,15 @@ namespace Quill\Post\Filters;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Facades\DB;
 use Vellum\Filters\Filter;
+use Quill\Sections\Models\Sections;
 
 class Section extends Filter
 {
 	protected function applyFilter(Builder $builder)
 	{
 		if (request($this->filterName()) != null) {
-			$builder->with('category')
-            ->whereHas('category', function($query) {
+			$builder->with('section')
+            ->whereHas('section', function($query) {
                 $query->where($this->foreignKey(), request($this->filterName()));
             });
 		}
@@ -22,8 +23,8 @@ class Section extends Filter
 
     public function apply(Builder $builder)
     {
-        return $builder->with('category')
-            ->whereHas('category', function($query){
+        return $builder->with('section')
+            ->whereHas('section', function($query){
                 $query->where($this->foreignKey(), request($this->filterName()));
             });
     }
@@ -40,7 +41,31 @@ class Section extends Filter
 
     public function options()
     {
-        return \App\Http\Models\Section::class;
+        return Sections::whereActive()->pluck('name', 'id')->toArray();
+    }
+
+    public function html()
+    {
+    	return '';
+    }
+
+    public function js()
+    {
+    	return [
+    		//
+    	];
+    }
+
+    public function css()
+    {
+    	return [
+    		//
+    	];
+    }
+
+    public function label()
+    {
+    	return 'Section';
     }
 
 }

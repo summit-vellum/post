@@ -18,6 +18,7 @@
 Route::group(['middleware' => 'web'], function() {
 
     Route::resource('post/article-reco', 'Vellum\Controllers\ShortcodeController');
+    Route::get('post/seo-score', '\Quill\SeoScore\Http\Controllers\SeoScoreController@index');
 
     // Route::resource('post', 'Vellum\Controllers\ResourceController');
 

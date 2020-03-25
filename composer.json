@@ -10,7 +10,10 @@
         }
     ],
     "minimum-stability": "dev",
-    "require": {},
+    "require": {
+    	"quill/sections": "dev-master",
+    	"quill/history": "dev-master"
+    },
     "autoload": {
         "psr-4": {
             "Quill\\Post\\": "src/"

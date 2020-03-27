@@ -12,7 +12,11 @@
     "minimum-stability": "dev",
     "require": {
     	"quill/sections": "dev-master",
-    	"quill/history": "dev-master"
+    	"quill/history": "dev-master",
+    	"quill/seoscore": "dev-master",
+    	"quill/tag": "dev-master",
+    	"quill/meta": "dev-master",
+    	"quill/status": "dev-master"
     },
     "autoload": {
         "psr-4": {

@@ -4,7 +4,6 @@ namespace Quill\Post\Models;
 
 use Quill\Sections\Models\Sections;
 use App\User;
-use Quill\Seo\Traits\HasSeo;
 use Quill\Post\Models\PostTags;
 use Quill\Tag\Models\Tag;
 use Vellum\Contracts\Fieldable;
@@ -20,8 +19,6 @@ use Illuminate\Support\Arr;
 
 class Post extends BaseModel
 {
-    use HasSeo;
-
     protected $table = 'posts';
 
     protected $appends = ['author', 'tags_list', 'visible_tags_list', 'invisible_tags_list', 'serialized_seo_topic', 'status_icon', 'is_published_later'];

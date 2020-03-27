@@ -9,7 +9,9 @@ use Illuminate\Support\Facades\Log;
 use Quill\Post\Models\Post;
 use Illuminate\Support\Arr;
 use Quill\Tag\Models\Tag;
+use Illuminate\Support\Str;
 use Request;
+
 
 class PostSaved
 {
@@ -106,6 +108,7 @@ class PostSaved
 
     	$meta = [
     		'title' => $metaRequest['meta_title'],
+    		'slug' => Str::slug($metaRequest['meta_title']),
     		'description' => $metaRequest['meta_description'],
     		'canonical' => $metaRequest['meta_canonical'],
     		'post_id' => $post->id,

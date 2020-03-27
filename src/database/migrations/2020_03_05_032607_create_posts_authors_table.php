@@ -17,7 +17,7 @@ class CreatePostsAuthorsTable extends Migration
     		$table->bigIncrements('id');
     		$table->integer('post_id');
     		$table->integer('author_id');
-    		$table->integer('old_author_id');
+    		$table->integer('old_author_id')->default(0);
     		$table->string('custom_by_line', 500)->nullable();
     		$table->tinyInteger('status')->default(1);
     		$table->timestamps();

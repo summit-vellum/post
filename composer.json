@@ -16,6 +16,7 @@
     	"quill/seoscore": "dev-master",
     	"quill/tag": "dev-master",
     	"quill/meta": "dev-master",
+    	"quill/powerwords": "dev-master",
     	"quill/status": "dev-master"
     },
     "autoload": {

@@ -49,12 +49,16 @@ class PostServiceProvider extends ServiceProvider
         ], 'post.views');
 
         $this->publishes([
-        	__DIR__ . '/public/js/tinymce' => public_path('vendor/post/js/tinymce')
-        ], 'post.tinymce.js');
-
-        $this->publishes([
         	__DIR__ . '/public/js/seo_topic.js' => public_path('vendor/post/js/seo_topic.js')
         ], 'post.seotopic.js');
+
+        $this->publishes([
+        	__DIR__ . '/public/js/custom_byline.js' => public_path('vendor/post/js/custom_byline.js')
+        ], 'post.custom_byline.js');
+
+        $this->publishes([
+        	__DIR__ . '/public/js/form_validation.js' => public_path('vendor/post/js/form_validation.js')
+        ], 'post.form_validation.js');
     }
 
     public function register()

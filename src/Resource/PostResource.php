@@ -186,7 +186,7 @@ class PostResource extends Post implements Formable
 	            	return $post->visible_tags_list;
        	    	})
 	            ->tagsInput([
-	            	'apiUrl' => 'https://local.quill.cosmo.summitmedia-digital.com/tag/api',
+	            	'apiUrl' => '/tag/api',
 	            	'fields' => 'id,name,count',
 	            	'fieldName' => 'name',
 	            	'name' => 'visible_tags',
@@ -207,7 +207,7 @@ class PostResource extends Post implements Formable
 	            	return $post->invisible_tags_list;
        	    	})
 	            ->tagsInput([
-	            	'apiUrl' => 'https://local.quill.cosmo.summitmedia-digital.com/tag/api',
+	            	'apiUrl' => '/tag/api',
 	            	'fields' => 'id,name,count',
 	            	'fieldName' => 'name',
 	            	'name' => 'invisible_tags',
@@ -254,14 +254,19 @@ class PostResource extends Post implements Formable
 	            ->modify(function($id, $post){
 	            	$data = '';
 	            	if (count(Request::segments()) > 1) {
-	            		$data = json_encode($post->author);
+	            		$data = json_encode(
+	            					array_filter($post->author, function($q) {
+				            			return empty($q['custom_by_line']);
+				            		})
+				            	);
 	            	} else {
 	            		$data = $post->getAuthorNames();
 	            	}
+
 	            	return $data;
 	            })
 	            ->tagsInput([
-	            	'apiUrl' => 'https://staging.uam.summitmedia-digital.com/author',
+	            	'apiUrl' => env('UAM_URL').'/author',
 	            	'fields' => 'id,display_name',
 	            	'fieldName' => 'display_name',
 	            	'name' => 'authors',
@@ -315,20 +320,64 @@ class PostResource extends Post implements Formable
                 ->yieldAt('publishDate'),
 
             Text::make('Custom Byline', 'custom_byline')
+            	->relation('custom_byline_author')
+	            ->modify(function($customBylineAuthor, $post){
+	            	$customAuthorLists = array_filter($post->author, function($q) {
+					            			return !empty($q['custom_by_line']);
+					            		});
+
+	            	return ($customAuthorLists) ? $customAuthorLists[1]['custom_by_line'] : '';
+	            })
 	            ->placeholder('Enter custom byline')
 	            ->help('If filled, this will always appear on the live site even if Main Author display is turned off.')
 	            ->classes('cf-input')
 	            ->hideFromIndex()
 	            ->yieldAt('yield_custom_byline')
-            	->yieldLabelSectionAt('yield_custom_byline_label'),
+            	->yieldLabelSectionAt('yield_custom_byline_label')
+            	->anArrayField()
+            	->setJs(['vendor/post/js/custom_byline.js']),
 
-	        Text::make('Custom Byline Author', 'custom_byline_author')
+            Text::make('Custom Byline Author Copy', 'custom_byline_author_copy')
+            	->labelClasses('hide')
+            	->relation('custom_byline_author')
+            	->modify(function($customBylineAuthor, $post){
+            		$customAuthorLists = array_filter($post->author, function($q) {
+					            			return !empty($q['custom_by_line']);
+					            		});
+
+            		if (count($customAuthorLists) > 1) {
+            			unset($customAuthorLists[1]);
+            			return json_encode($customAuthorLists);
+            		}
+	            })
+	            ->yieldAt('yield_custom_byline_author_copy')
+	            ->hideFromIndex()
+	            ->classes('hide'),
+
+	        Tagsinput::make('Custom Byline Author', 'custom_byline_author')
+	        	->relation('custom_byline_author')
+	            ->modify(function($customBylineAuthor, $post){
+	            	$customAuthorLists = array_filter($post->author, function($q) {
+					            			return !empty($q['custom_by_line']);
+					            		});
+	            	return ($customAuthorLists) ? json_encode([$customAuthorLists[1]]) : '';
+
+	            })
+	        	->tagsInput([
+	            	'apiUrl' => env('UAM_URL').'/author',
+	            	'fields' => 'id,display_name',
+	            	'fieldName' => 'display_name',
+	            	'name' => 'custom_byline_author',
+	            	'isObj' => true,
+	            	'isMultiple' => false
+	            ])
 	            ->placeholder('Search by Author Name')
 	            ->help('Please assign a name for this custom byline.')
 	            ->labelClasses('hide')
-	            ->classes('cf-input')
+	            ->classes('cf-input hide')
 	            ->hideFromIndex()
-	            ->yieldAt('yield_custom_byline_author'),
+	            ->yieldAt('yield_custom_byline_author')
+	            ->anArrayField(),
 
 	        Label::make('', 'custom_byline_btn')
 	        	->setStaticValue('+ Add Another Custom Byline')
@@ -341,7 +390,19 @@ class PostResource extends Post implements Formable
 	            ->yieldAt('yield_custom_byline_btn')
 	            ->inputClass('form-group mb-5'),
 
-	        Text::make('Editor', 'editor')
+	        TagsInput::make('Editor', 'editor')
+	        	->relation('editor')
+	            ->modify(function($editor, $post){
+	            	return $post->editor;
+	            })
+	        	->tagsInput([
+	            	'apiUrl' => env('UAM_URL').'/website/staff/3',
+	            	'fields' => 'id,display_name',
+	            	'fieldName' => 'display_name',
+	            	'name' => 'editor',
+	            	'isObj' => true,
+	            	'isMultiple' => false
+	            ])
 	            ->placeholder('Search by Name')
 	            ->help('Please assign an editor to this article.')
 	            ->classes('cf-input')
@@ -446,9 +507,9 @@ class PostResource extends Post implements Formable
     	];
 
         return [
-            new \Vellum\Actions\ViewAction,
+            // new \Vellum\Actions\ViewAction,
             new \Vellum\Actions\DeleteAction($deleteDialogNotif, true),
-            new \Quill\Post\Actions\PreviewAction,
+            // new \Quill\Post\Actions\PreviewAction,
         ];
     }
 
@@ -461,7 +522,7 @@ class PostResource extends Post implements Formable
 
     public function excludedFields()
     {
-    	return ['meta_title', 'meta_description', 'meta_canonical', 'custom_byline', 'authors', 'pushed_notif', 'visible_tags', 'invisible_tags', 'custom_byline', 'custom_byline_author', 'custom_byline_btn', 'seo_score_breakdown'];
+    	return ['meta_title', 'meta_description', 'meta_canonical', 'custom_byline', 'authors', 'pushed_notif', 'visible_tags', 'invisible_tags', 'custom_byline', 'custom_byline_author', 'custom_byline_author_copy', 'custom_byline_btn', 'seo_score_breakdown'];
     }
 
 }

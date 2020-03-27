@@ -12,6 +12,7 @@ use Vellum\Contracts\Resource;
 use Illuminate\Support\Facades\Schema;
 use Quill\Post\Http\Controllers\BaseController;
 use Quill\Status\Http\Helpers\StatusHelper as Status;
+use Request;
 
 class PostObserver extends BaseController
 {

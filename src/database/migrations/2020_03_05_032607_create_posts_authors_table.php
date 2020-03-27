@@ -18,8 +18,8 @@ class CreatePostsAuthorsTable extends Migration
     		$table->integer('post_id');
     		$table->integer('author_id');
     		$table->integer('old_author_id');
-    		$table->string('custom_by_line', 500);
-    		$table->tinyInteger('status');
+    		$table->string('custom_by_line', 500)->nullable();
+    		$table->tinyInteger('status')->default(1);
     		$table->timestamps();
             $table->softDeletes();
 

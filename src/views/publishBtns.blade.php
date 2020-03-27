@@ -1,5 +1,6 @@
 <li>
-	@button(['element'=>'button', 'color'=>'blue','label'=>'Save', 'onclick'=>'$("#form-'.$module.'").submit()', 'class'=>'hide btn btn-primary btn-block article-post mt-2 mb-2 px-5', 'attr' => arrayToHtmlAttributes(['name'=>'submit'])])
+	@php $hide = (isset($data) && !empty($data)) ? '' : 'hide'; @endphp
+	@button(['element'=>'button', 'color'=>'blue','label'=>'Save', 'onclick'=>'$("#form-'.$module.'").submit()', 'class'=>'btn '.$hide.' btn-primary btn-block article-post mt-2 mb-2 px-5', 'attr' => arrayToHtmlAttributes(['name'=>'submit'])])
 	<img src="/images/spinner.gif" data-ajax-loader="" class="mt-3 hide" width="25" height="25">
 </li>
 @if(isset($data) && !empty($data))

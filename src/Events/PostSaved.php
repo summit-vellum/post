@@ -54,17 +54,49 @@ class PostSaved
     	$authors = Request::input('authors');
     	$authors = json_decode($authors, true);
 
-		$post->authors()->forceDelete();
-		$authorIds = Arr::pluck($authors, 'id');
+    	$customBylineAuthors = Request::input('custom_byline_author');
+    	$customBylines = Request::input('custom_byline');
 
-		foreach ($authorIds as $key => $authorId) {
-			$author = [
-				'post_id' => $post->id,
-                'author_id' => $authorId,
-                'status' => 1
-			];
-			$post->authors()->create($author);
+    	if (!empty($customBylineAuthors)) {
+    		foreach ($customBylineAuthors as $key => $customBylineAuthor) {
+    			if ($customBylineAuthor != '') {
+                    $customBylineAuthor = json_decode($customBylineAuthor, true);
+                    $customBylineAuthors[$key] = [
+                        'custom_by_line' => $customBylines[$key],
+                        'author_id' => Arr::get(head($customBylineAuthor), 'id')
+                    ];
+                }
+    		}
+    		$customBylineAuthors = array_filter($customBylineAuthors);
+            $customBylineAuthors = array_map(function($item){ return array_filter($item); }, $customBylineAuthors);
+            $customBylineAuthors = array_filter($customBylineAuthors);
+    	}
+
+		$post->authors()->forceDelete();
+
+		if (!empty($authors)) {
+			$authorIds = Arr::pluck($authors, 'id');
+			foreach ($authorIds as $key => $authorId) {
+				$author = [
+					'post_id' => $post->id,
+	                'author_id' => $authorId,
+	                'status' => 1
+				];
+				$post->authors()->create($author);
+			}
 		}
+
+		if (!empty($customBylineAuthors)) {
+            foreach ($customBylineAuthors as $author) {
+            		$cbAuthor = [
+	                    'article_id'     => $post->id,
+	                    'author_id'      => $author['author_id'],
+	                    'custom_by_line' => $author['custom_by_line'],
+	                    'status'         => 1
+	                ];
+					$post->authors()->create($cbAuthor);
+            }
+        }
     }
 
     public static function createMeta($post)

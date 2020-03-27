@@ -81,7 +81,7 @@ class Post extends BaseModel
     		}
 
     		$authorData = array_map(function($item){
-    			return collect($item)->only('id', 'display_name')->toArray();
+    			return collect($item)->only('id', 'display_name', 'custom_by_line')->toArray();
     		}, $authorData);
 
     		return $authorData;

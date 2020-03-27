@@ -65,13 +65,18 @@
     		<div class="row mt-5">
     			<div class="col-md-6">@yield('yield_custom_byline_label')</div>
     		</div>
+    		<!-- custom byline start -->
     		<div class="row">
-    			<div>
-	    			<div class="col-md-6">@yield('yield_custom_byline')</div>
-	    			<div class="col-md-6">@yield('yield_custom_byline_author')</div>
-	    		</div>
+    			@yield('yield_custom_byline_author_copy')
+    			<div data-custom-byline-container>
+    				<div data-custom-byline>
+		    			<div class="col-md-6">@yield('yield_custom_byline')</div>
+		    			<div class="col-md-6">@yield('yield_custom_byline_author')</div>
+		    		</div>
+    			</div>
     			<div class="col-md-6 mt-5">@yield('yield_custom_byline_btn')</div>
     		</div>
+    		<!-- custom byline end-->
     		<div class="row">
     			<div class="col-md-6">@yield('yield_editor')</div>
     			<div class="col-md-6">@yield('yield_contributor_fee')</div>

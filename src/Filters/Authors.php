@@ -41,7 +41,7 @@ class Authors extends Filter
     	$attributes = [
     		'id' => 'authors',
     		'placeholder' => 'Search by Author Name',
-    		'tagsinput-config' => json_encode(["apiUrl" => "https://staging.uam.summitmedia-digital.com/author",
+    		'tagsinput-config' => json_encode(["apiUrl" => env('UAM_URL')."/author",
 	            	"fields" => "id,display_name",
 	            	"fieldName" => "display_name",
 	            	"name" => "authors",
@@ -49,7 +49,7 @@ class Authors extends Filter
     	];
 
     	$value = request($this->filterName());
-    	return compressHTML(template('tagsinput',['attributes' => $attributes, 'value' => $value],'field'));
+    	return compressHTML(template('tagsinput',['attributes' => $attributes, 'value' => $value, 'containerClass' => 'dshbrd-filter bg-white'], 'field'));
     }
 
     public function js()

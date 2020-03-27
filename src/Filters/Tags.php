@@ -42,7 +42,7 @@ class Tags extends Filter
     	$attributes = [
     		'id' => 'tags',
     		'placeholder' => 'Search by Article Tag',
-    		'tagsinput-config' => json_encode(["apiUrl" => "https://local.quill.cosmo.summitmedia-digital.com/tag/api",
+    		'tagsinput-config' => json_encode(["apiUrl" => "/tag/api",
 	            	"fields" => "id,name",
 	            	"fieldName" => "name",
 	            	"name" => "tags",
@@ -50,7 +50,7 @@ class Tags extends Filter
     	];
 
     	$value = request($this->filterName());
-    	return compressHTML(template('tagsinput',['attributes' => $attributes, 'value' => $value],'field'));
+    	return compressHTML(template('tagsinput',['attributes' => $attributes, 'value' => $value, 'containerClass' => 'dshbrd-filter bg-white'], 'field'));
     }
 
     public function js()

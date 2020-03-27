@@ -57,7 +57,7 @@ class PostServiceProvider extends ServiceProvider
         ], 'post.custom_byline.js');
 
         $this->publishes([
-        	__DIR__ . '/public/js/form_validation.js' => public_path('vendor/post/js/form_validation.js')
+        	__DIR__ . '/public/js/form_validations.js' => public_path('vendor/post/js/form_validations.js')
         ], 'post.form_validation.js');
     }
 

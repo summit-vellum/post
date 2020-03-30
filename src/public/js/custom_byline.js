@@ -16,7 +16,33 @@ $(document).ready(function(){
 		appendCustomByline(customByLineIndex, '');
 		customByLineIndex++;
 	});
+
+	$('*[data-custom-byline]').find('[data-tagsinput]').on('itemAdded', makeCustomeBylineRequired);
+	$('*[data-custom-byline]').find('[data-tagsinput]').on('itemRemoved', makeCustomeBylineRequired);
+
+	$(document).on('blur', '[name*="custom_byline"]', function(){
+		$(this).removeAttr('style');
+        var makeCbAuthorRequired = $(this).parents('[data-custom-byline]').find('[name="custom_byline_author[]"]');
+
+		if ($(this).val() == '') {
+			makeCbAuthorRequired.attr('required', false);
+		} else {
+			makeCbAuthorRequired.attr('required', true);
+		}
+    });
+
 });
+
+var makeCustomeBylineRequired = function(event) {
+	$(event.target).siblings('.bootstrap-tagsinput').removeAttr('style');
+	var makeCbRequired = $(this).parents('[data-custom-byline]').find('[name="custom_byline[]"]');
+
+	if ($(this).val() == '') {
+		makeCbRequired.attr('required', false);
+	} else {
+		makeCbRequired.attr('required', true);
+	}
+}
 
 var appendCustomByline = function(index, value) {
 	var customBylineClone = customByLine.eq(0).clone();
@@ -31,8 +57,7 @@ var appendCustomByline = function(index, value) {
 
 	customBylineAuthorConfig = customBylineClone.find('.yield_custom_byline_author #custom_byline_author').data('tagsinputConfig');
 	customBylineAuthorConfig.name = 'custom_byline_author_'+index;
-	customBylineClone.find('.yield_custom_byline_author #custom_byline_author').removeAttr('data-tagsinput')
-																			   .attr('data-tagsinput-config', JSON.stringify(customBylineAuthorConfig));
+	customBylineClone.find('.yield_custom_byline_author #custom_byline_author').attr('data-tagsinput-config', JSON.stringify(customBylineAuthorConfig));
 
 	customBylineClone.find('.yield_custom_byline_author #custom_byline_author').attr('id', 'custom_byline_author_'+index);
 
@@ -50,4 +75,8 @@ var appendCustomByline = function(index, value) {
 		clonedBylineAuthor.tagsinput('add', value);
 		clonedByline.val(value.custom_by_line);
 	}
+
+	clonedBylineAuthor.on('itemAdded', makeCustomeBylineRequired);
+	clonedBylineAuthor.on('itemRemoved', makeCustomeBylineRequired);
+
 }

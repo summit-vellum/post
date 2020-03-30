@@ -84,6 +84,7 @@ class PostResource extends Post implements Formable
             	->inputClass('form-group mb-5'),
 
             Textarea::make('Seo Title', 'meta_title')
+            	->rules('required')
             	->relation('meta.title')
             	->help('The ideal length of an article meta title is between 55-65 characters. Meta titles are shown in results page of search engines like Google; but are truncated if it is too long.')
             	->classes('cf-input scrollable-input')
@@ -93,7 +94,6 @@ class PostResource extends Post implements Formable
             	->inputClass('form-group mb-5'),
 
             Textarea::make('Article Slug', 'slug')
-            	->rules('required')
             	->help('Make sure that you review your article slug before publishing. You may no longer change it once published.')
             	->classes('cf-input scrollable-input')
             	->autoSlugSource('title')
@@ -102,6 +102,7 @@ class PostResource extends Post implements Formable
             	->inputClass('form-group mb-5'),
 
             Textarea::make('Blurb')
+            	->rules('required')
                 ->help('Use a blurb to convey a short statement to accompany your title. This is displayed in the article page, as well as on Facebook and Twitter.')
                 ->hideFromIndex()
                 ->classes('cf-input scrollable-input')
@@ -110,6 +111,7 @@ class PostResource extends Post implements Formable
             	->inputClass('form-group mb-5'),
 
             Textarea::make('SEO Meta Description', 'meta_description')
+            	->rules('required')
             	->relation('meta.description')
                 ->help('Provide a short summary of what visitors should expect to read in your article. This is displayed on search engine results pages.')
                 ->classes('cf-input scrollable-input')
@@ -250,6 +252,7 @@ class PostResource extends Post implements Formable
 	            ->yieldAt('yield_thumb_image'),
 
             Tagsinput::make('Author', 'authors')
+            	->rules('required')
 	            ->relation('id')
 	            ->modify(function($id, $post){
 	            	$data = '';

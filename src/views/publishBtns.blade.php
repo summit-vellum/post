@@ -1,6 +1,6 @@
 <li>
 	@php $hide = (isset($data) && !empty($data)) ? '' : 'hide'; @endphp
-	@button(['element'=>'button', 'color'=>'blue','label'=>'Save', 'onclick'=>'$("#form-'.$module.'").submit()', 'class'=>'btn '.$hide.' btn-primary btn-block article-post mt-2 mb-2 px-5', 'attr' => arrayToHtmlAttributes(['name'=>'submit'])])
+	@button(['element'=>'button', 'color'=>'blue','label'=>'Save', 'class'=>'btn '.$hide.' btn-primary '.$module.'-submit btn-block article-post mt-2 mb-2 px-5', 'attr' => arrayToHtmlAttributes(['name'=>'submit'])])
 	<img src="/images/spinner.gif" data-ajax-loader="" class="mt-3 hide" width="25" height="25">
 </li>
 @if(isset($data) && !empty($data))
@@ -47,7 +47,7 @@
                 </div>
 
                 <div class="col-md-4">
-                	@button(['element'=>'button', 'label'=>'Publish Later', 'class'=>'btn btn-outline-primary btn-block '.$module.'-submit', 'attr'=>arrayToHtmlAttributes(['data-status' => $status[3]['id']])])
+                	@button(['element'=>'button', 'label'=>'Publish Later', 'class'=>'btn btn-outline-primary btn-block publish-later '.$module.'-submit', 'attr'=>arrayToHtmlAttributes(['data-status' => $status[3]['id']])])
                 </div>
             </div>
             @endif

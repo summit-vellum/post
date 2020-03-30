@@ -71,8 +71,8 @@ class PostTableSeeder extends Seeder
     				'date_published'=> $article->article_date_published,
     				'date_modified'=> $article->article_date_modified,
     				'date_created'=> $article->article_date_created,
-    				'created_at'=> date('Y-m-d H:m:i', $article->article_original_date_published),
-    				'updated_at'=> date('Y-m-d H:m:i', $article->article_date_modified)
+    				'created_at'=> ($article->article_original_date_published != 0) ? date('Y-m-d H:m:i', $article->article_original_date_published) : '0000-00-00 00:00:00',
+    				'updated_at'=> ($article->article_date_modified != 0) ? date('Y-m-d H:m:i', $article->article_date_modified) : '0000-00-00 00:00:00'
     			]);
 
     			$this->command->getOutput()->progressAdvance();

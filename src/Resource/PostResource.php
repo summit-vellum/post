@@ -25,7 +25,7 @@ class PostResource extends Post implements Formable
     public function fields()
     {
         return [
-            ID::make()->sortable()->searchable()
+            ID::make()->searchable()
             	->setJs(['vendor/post/js/form_validations.js'])
             	->template(view('post::templates.form')),
 
@@ -503,7 +503,7 @@ class PostResource extends Post implements Formable
     			'subText' => 'author'
     		],
     		'dismiss' => 'Cancel',
-    		'continue' => 'Yes, Delete this power word'
+    		'continue' => 'Yes, Delete this article'
     	];
 
         return [

@@ -50,7 +50,8 @@ $(document).ready(function(){
 		});
 
 		var postStatus = (typeof($(this).data('status')) !== 'undefined') ? $(this).data('status') : $('input[id="status"]').val();
-		if (!required && postStatus) {
+
+		if (!required) {
 			$('input[name="status"]').val(postStatus);
 
 			if ($(this).data('publish') == 'now') {

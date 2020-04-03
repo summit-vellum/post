@@ -18,6 +18,7 @@ use Quill\Status\Models\Status;
 use Vellum\Contracts\Formable;
 use Quill\Html\Fields\Tagsinput;
 use Quill\Html\Fields\Label;
+use Quill\Html\Fields\Button;
 use Request;
 
 class PostResource extends Post implements Formable
@@ -26,8 +27,14 @@ class PostResource extends Post implements Formable
     {
         return [
             ID::make()->searchable()
-            	->setJs(['vendor/post/js/form_validations.js'])
-            	->template(view('post::templates.form')),
+            	->setStyle([
+            		'https://maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css'
+            	])
+            	->setJs([
+            		'vendor/post/js/form_validations.js',
+            		'vendor/post/js/longread.js'
+            	])
+            	->template(view('post::templates.form', ['site' => config('site')])),
 
             Toggle::make('Longform?', 'longform')
             	->hideFromIndex()
@@ -159,7 +166,10 @@ class PostResource extends Post implements Formable
 	        	->tinymceRows(10)
 	        	->hideFromIndex()
 	        	->yieldAt('yield_summary')
-            	->inputClass('form-group mb-5'),
+            	->inputClass('form-group mb-5')
+            	->tinyMceAttributes([
+            		'tools' => 'undo redo | styleselect | bold italic | alignleft aligncenter alignright alignjustify | customBullist customNumlist | link code | fullscreen'
+            	]),
 
 	       	TagsInput::make('Seo Topic', 'seo_topic')
 	       		->relation('seo_topic')
@@ -481,7 +491,54 @@ class PostResource extends Post implements Formable
 
            	Text::make('Deleted at')
             ->hideFromIndex()
-            ->hideOnForms()
+            ->hideOnForms(),
+
+            /* Longform */
+            Button::make('Custom Article Intro', 'intro_btn')
+            	->labelClasses('hide')
+            	->setStaticValue('+ Add Intro')
+            	->classes('btn btn-success btn-block cf-button')
+            	->help('You may add a custom article intro before your article starts.')
+	       		->hideFromIndex()
+	       		->yieldAt('yield_intro_btn')
+	       		->setDataAttributes([
+            		'data-add-intro'=>''
+            	]),
+
+	       	Tinymce::make('', 'intro_text')
+	       		->labelClasses('hide')
+	        	->tinymceRows(10)
+	        	->hideFromIndex()
+            	->yieldAt('yield_intro_text')
+            	->tinyMceAttributes([
+            		'tools' => 'undo redo | bold italic | alignleft aligncenter alignright alignjustify',
+            		'hideStatusBar' => true,
+            		'charCount' => true,
+            		'maxChars' => 80
+            	])
+            	->anArrayField(),
+
+            Button::make('', 'intro_text_apply_btn')
+            	->labelClasses('hide')
+            	->setStaticValue('Apply')
+            	->hideFromIndex()
+            	->classes('btn btn-primary cf-button')
+            	->yieldAt('yield_intro_text_apply_btn')
+            	->setDataAttributes([
+					'data-id'=>'',
+					'data-intro-text-apply-btn'=>''
+				]),
+
+            Button::make('', 'add_more_intro_btn')
+            	->labelClasses('hide')
+            	->setStaticValue('+ Add Another Intro')
+            	->hideFromIndex()
+            	->classes('btn btn-success btn-block cf-button')
+            	->yieldAt('yield_add_more_intro_btn')
+            	->setDataAttributes([
+            		'data-add-more-intro'=>''
+            	])
+
         ];
     }
 
@@ -525,7 +582,7 @@ class PostResource extends Post implements Formable
 
     public function excludedFields()
     {
-    	return ['meta_title', 'meta_description', 'meta_canonical', 'custom_byline', 'authors', 'pushed_notif', 'visible_tags', 'invisible_tags', 'custom_byline', 'custom_byline_author', 'custom_byline_author_copy', 'custom_byline_btn', 'seo_score_breakdown'];
+    	return ['meta_title', 'meta_description', 'meta_canonical', 'custom_byline', 'authors', 'pushed_notif', 'visible_tags', 'invisible_tags', 'custom_byline', 'custom_byline_author', 'custom_byline_author_copy', 'custom_byline_btn', 'seo_score_breakdown', 'intro_btn', 'intro_text_1', 'intro_text_apply_btn', 'add_more_intro_btn'];
     }
 
 }

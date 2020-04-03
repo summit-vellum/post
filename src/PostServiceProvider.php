@@ -57,6 +57,10 @@ class PostServiceProvider extends ServiceProvider
         ], 'post.custom_byline.js');
 
         $this->publishes([
+        	__DIR__ . '/public/js/longread.js' => public_path('vendor/post/js/longread.js')
+        ], 'post.longread.js');
+
+        $this->publishes([
         	__DIR__ . '/public/js/form_validations.js' => public_path('vendor/post/js/form_validations.js')
         ], 'post.form_validation.js');
     }

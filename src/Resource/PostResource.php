@@ -77,7 +77,10 @@ class PostResource extends Post implements Formable
                 ->characterCount(55, 65, 'Oops! The title you added is quite long. This might look odd on certain parts of the site. Please consider making it shorter.')
                 ->autoSlug()
                 ->thWidthAttribute('50%')
-                ->uniqueChecker('Nice! You have a unique title!')
+                ->uniqueChecker([
+                	'unique' => 'Nice! You have a unique title!',
+                	'hasDuplicate' => 'Sorry, That title is already taken. Please provide another one.'
+                ])
                 ->thWidthAttribute('30%')
                 ->displayAsEdit()
                 ->yieldAt('yield_title')

@@ -10,6 +10,9 @@ $(document).ready(function(){
                 return false;
         }
 
+        $('form input[required]').css('border-color', '');
+        $('form input[required]').siblings('.bootstrap-tagsinput').css('border-color', '');
+
 		$('form').find(':input').each(function(){
 			var value = $.trim($(this).val()),
 				id = $(this).attr('id');
@@ -26,7 +29,6 @@ $(document).ready(function(){
             	if (hasTagInput.length > 0) {
                     var position = $(hasTagInput).offset().top - 100;
                     $(hasTagInput).css('border-color', 'red');
-                    $(hasTagInput).find('tt-input').addClass('testing');
                     $(hasTagInput.siblings('[data-tagsinput]')).tagsinput('focus');;
             	} else {
             		$('#'+required).css('border-color', 'red');

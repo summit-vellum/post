@@ -116,6 +116,7 @@ class PostResource extends Post implements Formable
                 ->help('Use a blurb to convey a short statement to accompany your title. This is displayed in the article page, as well as on Facebook and Twitter.')
                 ->hideFromIndex()
                 ->classes('cf-input scrollable-input')
+                ->characterCount(70, 80, '')
                 ->hideFromIndex()
                 ->yieldAt('yield_blurb')
             	->inputClass('form-group mb-5'),

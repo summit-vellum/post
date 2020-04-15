@@ -113,4 +113,10 @@ $(document).ready(function(){
         }
     });
 
+    searchVol.val($('#search_volume').attr('value').trim());
+    if (searchVol.val() != '') {
+    	searchVol.attr('disabled', false);
+    } else {
+    	searchVol.attr('disabled', true);
+    }
 });

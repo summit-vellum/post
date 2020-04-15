@@ -63,6 +63,10 @@ class PostServiceProvider extends ServiceProvider
         $this->publishes([
         	__DIR__ . '/public/js/form_validations.js' => public_path('vendor/post/js/form_validations.js')
         ], 'post.form_validation.js');
+
+        $this->publishes([
+            __DIR__ . '/config/post.php' => config_path('post.php'),
+        ], 'post.config');
     }
 
     public function register()

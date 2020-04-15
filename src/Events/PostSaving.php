@@ -9,6 +9,7 @@ use Illuminate\Queue\SerializesModels;
 use Illuminate\Support\Facades\Log;
 use Quill\Post\Models\Post;
 use Illuminate\Support\Str;
+use Quill\Status\Http\Helpers\StatusHelper as Status;
 
 class PostSaving
 {
@@ -25,7 +26,12 @@ class PostSaving
      */
     public function __construct(Post $data)
     {
-    	$data->slug = Str::slug(request('title'));
+    	$data->is_published = 0;
+    	if ($data->status == Status::PUBLISH && $data->is_published == 0) {
+    		$data->is_published = 1;
+    		$data->original_date_published = strtotime($data->date_published);
+    	}
+
     	$data->date_published = strtotime($data->date_published);
     	$data->seo_topic = $this->getSeoTopic($data);
         $this->data = $data;

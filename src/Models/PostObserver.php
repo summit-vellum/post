@@ -11,7 +11,6 @@ use Quill\Post\Models\Post;
 use Vellum\Contracts\Resource;
 use Illuminate\Support\Facades\Schema;
 use Quill\Post\Http\Controllers\BaseController;
-use Quill\Status\Http\Helpers\StatusHelper as Status;
 use Request;
 
 class PostObserver extends BaseController
@@ -29,11 +28,6 @@ class PostObserver extends BaseController
 
     public function saving(Post $post)
     {
-    	if (Status::PUBLISH && $post->is_published == 0) {
-    		$post->is_published = 1;
-    		$post->original_date_published = strtotime($post->date_published);
-    	}
-
     	event(new PostSaving($post));
     }
 

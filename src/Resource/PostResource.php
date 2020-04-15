@@ -497,6 +497,19 @@ class PostResource extends Post implements Formable
             ->hideFromIndex()
             ->hideOnForms(),
 
+            Text::make('Is published')
+            ->hideFromIndex()
+            ->hideOnForms(),
+
+            Text::make('Uneditable fields')
+            ->relation('uneditable_fields')
+            ->modify(function($uneditableFields, $post){
+            	$postConfig = config('post');
+            	return ($postConfig) ? json_encode($postConfig['uneditable_fields']) : '';
+            })
+            ->hideFromIndex()
+            ->hideOnForms(),
+
             /* Longform */
             Button::make('Custom Article Intro', 'intro_btn')
             	->labelClasses('hide')
@@ -586,7 +599,7 @@ class PostResource extends Post implements Formable
 
     public function excludedFields()
     {
-    	return ['meta_title', 'meta_description', 'meta_canonical', 'custom_byline', 'authors', 'pushed_notif', 'visible_tags', 'invisible_tags', 'custom_byline', 'custom_byline_author', 'custom_byline_author_copy', 'custom_byline_btn', 'seo_score_breakdown', 'intro_btn', 'intro_text_1', 'intro_text_apply_btn', 'add_more_intro_btn', 'intro_text', 'intros_order_id', 'intros_id', 'intros_mobile_image', 'intros_desktop_image'];
+    	return ['meta_title', 'meta_description', 'meta_canonical', 'custom_byline', 'authors', 'pushed_notif', 'visible_tags', 'invisible_tags', 'custom_byline', 'custom_byline_author', 'custom_byline_author_copy', 'custom_byline_btn', 'seo_score_breakdown', 'intro_btn', 'intro_text_1', 'intro_text_apply_btn', 'add_more_intro_btn', 'intro_text', 'intros_order_id', 'intros_id', 'intros_mobile_image', 'intros_desktop_image', 'uneditable_fields'];
     }
 
 }

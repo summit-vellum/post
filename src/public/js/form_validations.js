@@ -63,4 +63,15 @@ $(document).ready(function(){
             $("#form-post").submit();
 		}
 	});
+
+	var isPublished = $('#is_published').val(),
+		uneditableFields = JSON.parse($('#uneditable_fields').val());
+
+	if (isPublished == 1) {
+		$.each(uneditableFields, function(index, field) {
+			$('#'+field).attr('readOnly', true);
+			$('#'+field).parents().find('.bootstrap-select').addClass('disabled');
+		});
+	}
+
 });

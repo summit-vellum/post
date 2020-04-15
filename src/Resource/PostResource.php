@@ -74,7 +74,7 @@ class PostResource extends Post implements Formable
                 ->searchable()
                 ->fieldSelected()
                 ->classes('cf-input-lg countChar scrollable-input expanded-txtbox')
-                ->characterCount(55, 65, 'Oops! The title you added is quite long. This might look odd on certain parts of the site. Please consider making it shorter.')
+                ->characterCount(54, 65, 'Oops! The title you added is quite long. This might look odd on certain parts of the site. Please consider making it shorter.')
                 ->autoSlug()
                 ->thWidthAttribute('50%')
                 ->uniqueChecker([
@@ -98,7 +98,7 @@ class PostResource extends Post implements Formable
             	->relation('meta.title')
             	->help('The ideal length of an article meta title is between 55-65 characters. Meta titles are shown in results page of search engines like Google; but are truncated if it is too long.')
             	->classes('cf-input scrollable-input')
-            	->characterCount(55, 65, '')
+            	->characterCount(54, 65, '')
             	->hideFromIndex()
             	->yieldAt('yield_meta_title')
             	->inputClass('form-group mb-5'),

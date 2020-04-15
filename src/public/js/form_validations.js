@@ -1,4 +1,5 @@
 $(document).ready(function(){
+	/* fields validation */
 	$('.post-submit').on('click', function(e){
 		var
           required = '',
@@ -65,13 +66,51 @@ $(document).ready(function(){
 	});
 
 	var isPublished = $('#is_published').val(),
-		uneditableFields = JSON.parse($('#uneditable_fields').val());
+		uneditableFields = $('#uneditable_fields').val();
 
+	uneditableFields = (uneditableFields) ? JSON.parse(uneditableFields) : '';
+
+	/* disables slug and section when an article have been published */
 	if (isPublished == 1) {
 		$.each(uneditableFields, function(index, field) {
 			$('#'+field).attr('readOnly', true);
 			$('#'+field).parents().find('.bootstrap-select').addClass('disabled');
 		});
 	}
+
+	/* enables search volume if seo keyword has value */
+	var seoKeyword = $('#seo_keyword'),
+		searchVol = $('#search_volume');
+
+	seoKeyword.on('keyup', function(event) {
+        if(seoKeyword.val() != '' && searchVol.val() == ''){
+            searchVol.css('border-color', 'red')
+            		 .attr('required', true)
+            		 .attr('disabled', false);
+        }else if(seoKeyword.val() == '' && searchVol.val() != ''){
+            seoKeyword.css('border-color', 'red')
+            		  .attr('required', true);
+        }else{
+            searchVol.removeAttr("style")
+            		 .attr('required', false);
+            seoKeyword.removeAttr("style")
+            		  .attr('required', false);
+        }
+    });
+
+    searchVol.on('blur', function(event) {
+        if (seoKeyword.val() != '' && searchVol.val() == '') {
+            searchVol.css('border-color', 'red')
+            		 .attr('required', true);
+        } else if (seoKeyword.val() == '' && searchVol.val() != '') {
+            seoKeyword.css('border-color', 'red')
+            		  .attr('required', true);
+        } else {
+            searchVol.removeAttr("style")
+            		 .attr('required', false);
+            seoKeyword.removeAttr("style")
+            		  .attr('required', false);
+        }
+    });
 
 });

@@ -54,6 +54,8 @@ class PostResource extends Post implements Formable
 	            ->yieldAt('yield_seo_keyword'),
 
 	        Text::make('Search Volume', 'search_volume')
+	        	->disabled()
+	        	->setInputType('number')
 	        	->classes('cf-input')
 	            ->hideFromIndex()
 	            ->yieldAt('yield_search_volume'),

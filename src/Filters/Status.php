@@ -6,6 +6,8 @@ use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Facades\DB;
 use Vellum\Filters\Filter;
 use Illuminate\Support\Arr;
+use Quill\Status\Models\Status as StatusModel;
+use Quill\Status\Http\Helpers\StatusHelper;
 
 class Status extends Filter
 {
@@ -41,7 +43,8 @@ class Status extends Filter
 
     public function options()
     {
-        return \Quill\Status\Models\Status::class;
+    	$status = StatusModel::where('id', '!=', 4)->pluck('name', 'id')->toArray();
+        return $status;
     }
 
     public function html()

@@ -21,7 +21,7 @@ class Post extends BaseModel
 {
     protected $table = 'posts';
 
-    protected $appends = ['author', 'tags_list', 'visible_tags_list', 'invisible_tags_list', 'serialized_seo_topic', 'status_icon', 'is_published_later'];
+    protected $appends = ['author', 'tags_list', 'visible_tags_list', 'invisible_tags_list', 'serialized_seo_topic', 'status_icon', 'is_published_later','author_names'];
 
     public function getIsPublishedLaterAttribute()
     {
@@ -85,6 +85,11 @@ class Post extends BaseModel
     	}
 
     	return [];
+    }
+
+    public function getAuthorNamesAttribute()
+    {
+    	return $this->getAuthorNames();
     }
 
     public function getTagsListAttribute()

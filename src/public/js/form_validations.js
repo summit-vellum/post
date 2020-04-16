@@ -70,11 +70,35 @@ $(document).ready(function(){
 
 	uneditableFields = (uneditableFields) ? JSON.parse(uneditableFields) : '';
 
+	var articleUrl = '#url';
+
+	//generate article url
+	var generateSectionUrl = function(id) {
+		ajaxPartialUpdate('/sections/search-section', 'POST', {id:id}).then(function(response){
+			if (response.success) {
+				url(response.section.url, $('#slug').val(), articleUrl);
+			}
+		});
+	}
+
+	generateSectionUrl($('#section_id').val());
+
 	/* disables slug and section when an article have been published */
 	if (isPublished == 1) {
 		$.each(uneditableFields, function(index, field) {
 			$('#'+field).attr('readOnly', true);
 			$('#'+field).parents().find('.bootstrap-select').addClass('disabled');
+		});
+
+	} else {
+		/* udapte url value based on slug and selected section */
+		$(document).on('change', '#slug' , function() {
+			url('', $(this).val(), articleUrl);
+			generateSectionUrl($('#section_id').val());
+		});
+
+		$(document).on('change', '#section_id', function(){
+			generateSectionUrl($(this).val());
 		});
 	}
 

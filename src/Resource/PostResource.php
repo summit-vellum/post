@@ -77,6 +77,7 @@ class PostResource extends Post implements Formable
                 ->classes('cf-input-lg countChar scrollable-input expanded-txtbox')
                 ->characterCount(54, 65, 'Oops! The title you added is quite long. This might look odd on certain parts of the site. Please consider making it shorter.')
                 ->autoSlug()
+                ->slugId('slug')
                 ->thWidthAttribute('50%')
                 ->uniqueChecker([
                 	'unique' => 'Nice! You have a unique title!',
@@ -111,6 +112,16 @@ class PostResource extends Post implements Formable
             	->hideFromIndex()
             	->yieldAt('yield_slug')
             	->inputClass('form-group mb-5'),
+
+           	Text::make('', 'url')
+           		->classes('cf-input bg-black')
+				->customLabelClasses('input-group-addon')
+				->customLabel('URL')
+           		->hideFromIndex()
+           		->labelClasses('hide')
+           		->yieldAt('yield_url')
+           		->inputClass('form-group mb-5')
+           		->help('Your article would be published and accessed thru the URL address above.'),
 
             Textarea::make('Blurb')
             	->rules('required')
@@ -414,7 +425,7 @@ class PostResource extends Post implements Formable
 	            	return $post->editor;
 	            })
 	        	->tagsInput([
-	            	'apiUrl' => env('UAM_URL').'/website/staff/3',
+	            	'apiUrl' => env('UAM_URL').'/website/staff/'.config('site.site_id'),
 	            	'fields' => 'id,display_name',
 	            	'fieldName' => 'display_name',
 	            	'name' => 'editor',
@@ -600,7 +611,7 @@ class PostResource extends Post implements Formable
 
     public function excludedFields()
     {
-    	return ['meta_title', 'meta_description', 'meta_canonical', 'custom_byline', 'authors', 'pushed_notif', 'visible_tags', 'invisible_tags', 'custom_byline', 'custom_byline_author', 'custom_byline_author_copy', 'custom_byline_btn', 'seo_score_breakdown', 'intro_btn', 'intro_text_1', 'intro_text_apply_btn', 'add_more_intro_btn', 'intro_text', 'intros_order_id', 'intros_id', 'intros_mobile_image', 'intros_desktop_image', 'uneditable_fields'];
+    	return ['meta_title', 'meta_description', 'meta_canonical', 'custom_byline', 'authors', 'pushed_notif', 'visible_tags', 'invisible_tags', 'custom_byline', 'custom_byline_author', 'custom_byline_author_copy', 'custom_byline_btn', 'seo_score_breakdown', 'intro_btn', 'intro_text_1', 'intro_text_apply_btn', 'add_more_intro_btn', 'intro_text', 'intros_order_id', 'intros_id', 'intros_mobile_image', 'intros_desktop_image', 'uneditable_fields', 'url'];
     }
 
 }

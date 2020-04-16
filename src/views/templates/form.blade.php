@@ -1,4 +1,5 @@
 <div class="container">
+	<input type="hidden" id="post_config" value="{{ json_encode($site) }}">
 	<div class="container px-0 container-max-width">
 		@yield('yield_longform')
 		<div class="row mt-7">
@@ -17,6 +18,7 @@
 		@yield('yield_meta_title')
 		@yield('yield_section')
 		@yield('yield_slug')
+		@yield('yield_url')
 		@yield('yield_blurb')
 		@yield('yield_meta_description')
 		@yield('yield_meta_canonical')

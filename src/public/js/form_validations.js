@@ -81,6 +81,7 @@ $(document).ready(function(){
 		});
 	}
 
+	url('', $('#slug').val(), articleUrl);
 	generateSectionUrl($('#section_id').val());
 
 	/* disables slug and section when an article have been published */

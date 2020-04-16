@@ -10,6 +10,7 @@ use Illuminate\Support\Facades\Log;
 use Quill\Post\Models\Post;
 use Illuminate\Support\Str;
 use Quill\Status\Http\Helpers\StatusHelper as Status;
+use Illuminate\Support\Arr;
 use Request;
 
 class PostSaving
@@ -68,7 +69,7 @@ class PostSaving
             foreach ($customAuthors as $key => $customAuthor) {
                 if (!empty($customAuthor)) {
                     $customAuthor         = json_decode($customAuthor, true);
-                    $authorIdSlugSuffix[] = 'a'.array_get(head($customAuthor), 'id');
+                    $authorIdSlugSuffix[] = 'a'.Arr::get(head($customAuthor), 'id');
                 }
             }
         }

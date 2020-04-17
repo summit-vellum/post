@@ -51,7 +51,7 @@ class ArticleRecoShortcode implements Shortcode
             data-shortcode="articleIds"
             data-shortcode-listen="click"
             data-shortcode-multiple
-            data-source=\''.trim($this->dataSource($post)).'\'
+            data-source=\''.trim(htmlspecialchars($this->dataSource($post), ENT_QUOTES, 'UTF-8')).'\'
             type="'.$this->element.'"
             name="radio"
             value=\''.trim($this->transform($post)).'\'>';

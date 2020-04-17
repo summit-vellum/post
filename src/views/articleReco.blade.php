@@ -87,6 +87,12 @@
     	event.preventDefault();
     });
 
+    $('#toolModal', window.parent.document).addClass('preventUniversalClick');
+
+    $('#toolModal', window.parent.document).click(function(){
+    	updateCookieInLaravel(shortcodeRoute, {deleteAllCookie:1}, true);
+    });
+
     $('[close-modal], [article-reco-type]').click(function(){
     	updateCookieInLaravel(shortcodeRoute, {deleteAllCookie:1}, true);
     });

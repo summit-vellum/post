@@ -20,6 +20,11 @@ class RegisterPostModule
             'class' => 'font-xl text-blue-500',
             'model' => \Quill\Post\Models\Post::class,
             'module' => 'Post',
+            'navHeader' => [
+            	'left' => 'Content',
+            	'right' => 'New Article',
+            	'field' => 'title' //field to be rendered on the right side of the navheader on edit
+            ]
         ];
     }
 

@@ -72,7 +72,7 @@ $(document).ready(function(){
 
 	var articleUrl = '#url';
 
-	//generate article url
+	/* generates article url */
 	var generateSectionUrl = function(id) {
 		ajaxPartialUpdate('/sections/search-section', 'POST', {id:id}).then(function(response){
 			if (response.success) {

@@ -335,7 +335,12 @@ class PostResource extends Post implements Formable
 
             Datetime::make('Published Copy', 'date_published_copy')
             	->relation('date_published')
-                ->dateConfig(['single' => true, 'dateFormat' => 'ddd, MMM DD, YYYY, hh:mm A', 'copyOn' => '#date_published'])
+                ->dateConfig([
+                	'single' => true,
+                	'dateFormat' => 'ddd, MMM DD, YYYY, hh:mm A',
+                	'copyOn' => '#date_published',
+                	'minDate' => date('Y/m/d')
+                ])
                 ->modify(function($date_published, $post){
                 	if (count(Request::segments()) > 1) {
                 		return ($date_published != 0) ? date('D, M d, Y, h:m A', $date_published) : 0;
@@ -611,7 +616,7 @@ class PostResource extends Post implements Formable
 
     public function excludedFields()
     {
-    	return ['meta_title', 'meta_description', 'meta_canonical', 'custom_byline', 'authors', 'pushed_notif', 'visible_tags', 'invisible_tags', 'custom_byline', 'custom_byline_author', 'custom_byline_author_copy', 'custom_byline_btn', 'seo_score_breakdown', 'intro_btn', 'intro_text_1', 'intro_text_apply_btn', 'add_more_intro_btn', 'intro_text', 'intros_order_id', 'intros_id', 'intros_mobile_image', 'intros_desktop_image', 'uneditable_fields', 'url'];
+    	return ['meta_title', 'meta_description', 'meta_canonical', 'custom_byline', 'authors', 'pushed_notif', 'visible_tags', 'invisible_tags', 'custom_byline', 'custom_byline_author', 'custom_byline_author_copy', 'custom_byline_btn', 'seo_score_breakdown', 'intro_btn', 'intro_text_1', 'intro_text_apply_btn', 'add_more_intro_btn', 'intro_text', 'intros_order_id', 'intros_id', 'intros_mobile_image', 'intros_desktop_image', 'intros_text', 'uneditable_fields', 'url'];
     }
 
 }

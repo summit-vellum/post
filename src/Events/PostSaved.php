@@ -28,14 +28,16 @@ class PostSaved
      */
     public function __construct(Post $data)
     {
-    	$visibleTags = $this->upsertTags($data, 'visible_tags');
-    	$invisibleTags = $this->upsertTags($data, 'invisible_tags', 0);
-    	$data->tags()->detach();
-    	$data->tags()->sync(array_merge($visibleTags, $invisibleTags));
+    	if ($data->status != Status::DISABLE) {
+    		$visibleTags = $this->upsertTags($data, 'visible_tags');
+	    	$invisibleTags = $this->upsertTags($data, 'invisible_tags', 0);
+	    	$data->tags()->detach();
+	    	$data->tags()->sync(array_merge($visibleTags, $invisibleTags));
 
-    	$this->upsertSeoScoreBreakdown($data);
-    	$this->createAuthors($data);
-    	$this->createMeta($data);
+	    	$this->upsertSeoScoreBreakdown($data);
+	    	$this->createAuthors($data);
+	    	$this->createMeta($data);
+    	}
 
         $this->data = $data;
     }

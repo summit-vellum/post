@@ -2,6 +2,7 @@
 
 namespace Quill\Post\Models;
 
+use Quill\Post\Events\PostDeleted;
 use Quill\Post\Events\PostSaved;
 use Quill\Post\Events\PostSaving;
 use Quill\Post\Events\PostUpdating;
@@ -12,6 +13,7 @@ use Vellum\Contracts\Resource;
 use Illuminate\Support\Facades\Schema;
 use Quill\Post\Http\Controllers\BaseController;
 use Request;
+use Quill\Status\Http\Helpers\StatusHelper as Status;
 
 class PostObserver extends BaseController
 {
@@ -45,6 +47,13 @@ class PostObserver extends BaseController
     {
     	$post->activity_code = $this->activity_code['edited'];
         event(new PostUpdated($post));
+    }
+
+    public function deleting(Post $post)
+    {
+    	$post->update([
+    		'status' => Status::DISABLE
+    	]);
     }
 
 

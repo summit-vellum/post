@@ -28,19 +28,22 @@ class PostSaving
      */
     public function __construct(Post $data)
     {
-    	if ($data->is_published == null) {
-    		$data->is_published = 0;
+    	if ($data->status != Status::DISABLE) {
+    		if ($data->is_published == null) {
+	    		$data->is_published = 0;
+	    	}
+
+	    	if ($data->status == Status::PUBLISH && $data->is_published == 0) {
+	    		$this->sendPusherNotif($data);
+	    		$data->slug = $this->createSlug($data->slug);
+	    		$data->is_published = 1;
+	    		$data->original_date_published = strtotime($data->date_published);
+	    	}
+
+	    	$data->date_published = strtotime($data->date_published);
+	    	$data->seo_topic = $this->getSeoTopic($data);
     	}
 
-    	if ($data->status == Status::PUBLISH && $data->is_published == 0) {
-    		$this->sendPusherNotif($data);
-    		$data->slug = $this->createSlug($data->slug);
-    		$data->is_published = 1;
-    		$data->original_date_published = strtotime($data->date_published);
-    	}
-
-    	$data->date_published = strtotime($data->date_published);
-    	$data->seo_topic = $this->getSeoTopic($data);
         $this->data = $data;
     }
 

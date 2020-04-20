@@ -12,5 +12,16 @@ return [
     	'title' => 'title',
     	'pre_author_txt' => 'by:',
     	'author' => 'author_names',
+    ],
+
+    'delete_dialog_notif' => [
+    	'header' => 'Are you sure you want to disable this article? You will no longer be able to publish this after it has been disabled.',
+		'valueDisplayedIn' => [
+			'title' => 'title',
+			'preSubText' => 'by:',
+			'subText' => 'author_names'
+		],
+		'dismiss' => 'Cancel',
+		'continue' => 'Yes, Delete this article'
     ]
 ];

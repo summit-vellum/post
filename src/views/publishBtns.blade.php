@@ -14,7 +14,7 @@
 		$postStatus = $data->status ?? false;
 	@endphp
 	<div id="article-status" class="btn-group">
-		<button type="button" class="btn {{ ($isPublishedLater) ? $status[3]['btn'] : $status[$postStatus]['btn'] }} mt-2 mb-1 px-5" data-toggle="dropdown">
+		<button type="button" class="btn {{ ($isPublishedLater) ? $status[3]['btn'] : $status[$postStatus]['btn'] }} mt-2 mb-1 px-5" data-toggle="dropdown" post-satus-btn>
             {{ ($isPublishedLater) ? $status[3]['name'] : $status[$postStatus]['name'] }}
             <b class="caret"></b>
         </button>
@@ -60,7 +60,17 @@
                     <small class="d-block">Content no longer be accessed</small>
                 </div>
                 <div class="col-md-4">
-                	@button(['element'=>'button', 'label'=>'Disable', 'class'=>'btn btn-danger btn-block '.$module.'-submit', 'attr'=>arrayToHtmlAttributes(['data-status' => $status[2]['id']])])
+                	@php
+                		$deleteDialogNotif = $moduleConfig['delete_dialog_notif'];
+                		$subText = isset($deleteDialogNotif['valueDisplayedIn']['subText']) ? $data[$deleteDialogNotif['valueDisplayedIn']['subText']] : '';
+                		$subText = isset($deleteDialogNotif['valueDisplayedIn']['preSubText']) ? $deleteDialogNotif['valueDisplayedIn']['preSubText'].' '.$subText : $subText;
+                	@endphp
+                	@button(['element'=>'button', 'label'=>'Disable', 'class'=>'btn btn-danger btn-block '.$module.'-submit', 'attr'=>arrayToHtmlAttributes([
+                								   'data-status' => $status[2]['id'],
+                								   'data-toggle' => 'modal',
+                								   'data-target' => '#deleteResourceDialog',
+                								   'data-ajax-modal' => '{"items":{"title":"'.htmlspecialchars($data[$deleteDialogNotif['valueDisplayedIn']['title']], ENT_QUOTES, 'UTF-8').'","header":"'.$deleteDialogNotif['header'].'","dismiss":"'.$deleteDialogNotif['dismiss'].'","continue":"'.$deleteDialogNotif['continue'].'","subtext":"'.$subText.'"},"params":{"url":"'.url($module, $data['id']).'","type":"DELETE","callback":"directToUrl","link":"'.route($module.'.index').'"}}'
+                								])])
                 </div>
             </div>
             @endif

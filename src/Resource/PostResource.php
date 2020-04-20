@@ -590,15 +590,7 @@ class PostResource extends Post implements Formable
 
     public function actions()
     {
-    	$deleteDialogNotif = [
-    		'header' => 'Are you sure you want to disable this article? You will no longer be able to publish this after it has been disabled.',
-    		'valueDisplayedIn' => [
-    			'title' => 'title',
-    			'subText' => 'author'
-    		],
-    		'dismiss' => 'Cancel',
-    		'continue' => 'Yes, Delete this article'
-    	];
+    	$deleteDialogNotif = config('post.delete_dialog_notif');
 
         return [
             // new \Vellum\Actions\ViewAction,

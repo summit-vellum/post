@@ -28,8 +28,8 @@ class PostSaving
      */
     public function __construct(Post $data)
     {
-    	if ($data->is_published == '') {
-    		$data->is_published == 0
+    	if ($data->is_published == null) {
+    		$data->is_published = 0;
     	}
 
     	if ($data->status == Status::PUBLISH && $data->is_published == 0) {

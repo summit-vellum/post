@@ -67,6 +67,14 @@ class PostServiceProvider extends ServiceProvider
         $this->publishes([
             __DIR__ . '/config/post.php' => config_path('post.php'),
         ], 'post.config');
+
+        $this->publishes([
+        	__DIR__ . '/public/js/pusher-main.js' => public_path('js/pusher-main.js')
+        ], 'post.pusher.main');
+
+        $this->publishes([
+        	__DIR__ . '/public/js/pusher' => public_path('vendor/post/js/pusher')
+        ], 'post.pushers');
     }
 
     public function register()

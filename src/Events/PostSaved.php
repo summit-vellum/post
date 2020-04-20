@@ -11,7 +11,7 @@ use Illuminate\Support\Arr;
 use Quill\Tag\Models\Tag;
 use Illuminate\Support\Str;
 use Request;
-
+use Quill\Status\Http\Helpers\StatusHelper as Status;
 
 class PostSaved
 {
@@ -36,7 +36,84 @@ class PostSaved
     	$this->upsertSeoScoreBreakdown($data);
     	$this->createAuthors($data);
     	$this->createMeta($data);
+
+    	$data->is_published = 0;
+    	if ($data->status == Status::PUBLISH && $data->is_published == 0) {
+    		$this->sendPusherNotif($data);
+    		$data->slug = $this->createSlug($data->slug);
+    		$data->is_published = 1;
+    		$data->original_date_published = strtotime($data->date_published);
+    	}
+
         $this->data = $data;
+    }
+
+    public function sendPusherNotif($data)
+    {
+		event(new PostPublished([
+    		'title'=> $data->title,
+    		'author'=> auth()->user()->display_name,
+    		'url' => config('site.protocol').config('site.domain').'/'.$data->section->url.$data->slug
+    	]));
+    }
+
+    public function createSlug($slug)
+    {
+    	$slugArr = explode('-', $slug);
+    	$syndicatedFrom = false;
+    	$siteSuffix = '';
+
+    	foreach ($slugArr as $key => $value) {
+            if (preg_match('/^(sa|a)([[:digit:]]{5})/', $value)) {
+                unset($slugArr[$key]);
+            } elseif (preg_match('/^[[:digit:]]{8}$/', $value)) { //removes all author ids from slug ex(a00123, sa00123)
+                unset($slugArr[$key]);
+            }
+        }
+
+        $slug = implode('-', $slugArr);
+
+        $customAuthors = Request::input('custom_byline_author');
+        if (!empty($customAuthors)) {
+            foreach ($customAuthors as $key => $customAuthor) {
+                if (!empty($customAuthor)) {
+                    $customAuthor         = json_decode($customAuthor, true);
+                    $authorIdSlugSuffix[] = 'a'.Arr::get(head($customAuthor), 'id');
+                }
+            }
+        }
+
+        $authors = Request::input('authors');
+        $authors = json_decode($authors);
+        if ($authors) {
+            foreach ($authors as $author) {
+                $authorIdSlugSuffix[] = ($syndicatedFrom ? 'sa' : 'a').$author->id;
+            }
+        }
+
+        $authorSuffix = '-'.implode('-', $authorIdSlugSuffix);
+
+        $datepublished = date('Ymd', strtotime(Request::input('date_published')));
+        $newSlug       = $slug.$authorSuffix.'-'.$datepublished.$siteSuffix;
+
+        $wordCount     = str_word_count(strip_tags(Request::input('content')));
+
+        //clean existing long form suffix
+        $arrSearch     = array('-lfrm10','-lfrm'.floor($wordCount / 1000),'-lfrm');
+        $newSlug       = str_replace($arrSearch, '',  $newSlug);
+
+        //add lform1-10
+        if ($wordCount >= 10000) {
+            $newSlug .= '-lfrm10';
+        } elseif ($wordCount >= 2000) {
+            $newSlug .= '-lfrm'.floor($wordCount / 1000);
+        } elseif ($wordCount >= 1000) {
+            $newSlug .= '-lfrm';
+        }
+
+        //final slug
+        return $newSlug;
+
     }
 
     public function upsertSeoScoreBreakdown($post)

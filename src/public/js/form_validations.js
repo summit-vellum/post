@@ -54,7 +54,7 @@ $(document).ready(function(){
 
 		var postStatus = (typeof($(this).data('status')) !== 'undefined') ? $(this).data('status') : $('input[id="status"]').val();
 
-		if (!required) {
+		if (!required && postStatus != 2) {
 			$('input[name="status"]').val(postStatus);
 
 			if ($(this).data('publish') == 'now') {
@@ -62,6 +62,8 @@ $(document).ready(function(){
             }
 
             $("#form-post").submit();
+		} else {
+			$('[post-satus-btn]').click();
 		}
 	});
 

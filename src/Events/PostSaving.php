@@ -28,7 +28,11 @@ class PostSaving
      */
     public function __construct(Post $data)
     {
-    	if ($data->status == Status::PUBLISH && ($data->is_published == '' || $data->is_published == 0)) {
+    	if ($data->is_published == '') {
+    		$data->is_published == 0
+    	}
+
+    	if ($data->status == Status::PUBLISH && $data->is_published == 0) {
     		$this->sendPusherNotif($data);
     		$data->slug = $this->createSlug($data->slug);
     		$data->is_published = 1;

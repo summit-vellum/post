@@ -5,7 +5,7 @@
 @endpush
 
 @section('head')
-    @include('post::modal.preview-header', ['rightBtnClass' => 'hide', 'attributes' => arrayToHtmlAttributes(['id' => 'insert-shortcode', 'disabled' => 'disabled'])])
+    @include('post::modal.preview-header')
 @endsection
 
 @section('content')

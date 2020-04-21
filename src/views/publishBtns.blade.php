@@ -1,11 +1,17 @@
 <li>
-	@php $hide = (isset($data) && !empty($data)) ? '' : 'hide'; @endphp
-	@button(['element'=>'button', 'color'=>'blue','label'=>'Save', 'class'=>'btn '.$hide.' btn-primary '.$module.'-submit btn-block article-post mt-2 mb-2 px-5', 'attr' => arrayToHtmlAttributes(['name'=>'submit'])])
-	<img src="/images/spinner.gif" data-ajax-loader="" class="mt-3 hide" width="25" height="25">
+	@php
+		$hide = (isset($data) && !empty($data)) ? '' : 'hide';
+		$hide = (Session::has('flash_message')) ? 'hide' : '';
+	@endphp
+	@if(Session::has('flash_message'))
+    <div class="mt-3" flash-message><em>{{ Session::get('flash_message') }}</em></div>
+    @endif
+	@button(['element'=>'button', 'color'=>'blue','label'=>'Save', 'class'=>'btn '.$hide.' btn-primary '.$module.'-submit btn-block article-post mt-2 mb-2 px-5', 'attr' => arrayToHtmlAttributes(['name'=>'submit', 'btn-post-save' => ''])])
+	<img src="/images/spinner.gif" class="mt-3 hide" width="25" height="25" data-post-loader>
 </li>
 @if(isset($data) && !empty($data))
 <li>
-	@button(['link' => '#', 'label'=>'Preview', 'icon'=>'preview', 'iconClasses'=>'color-black', 'attr'=>arrayToHtmlAttributes(['data-post-preview' => '', 'data-toggle' => 'modal', 'data-target' => '#toolModal', 'data-url' => route($module.'.preview', ['id' => $data->id]).'#platform-mobile']), 'class' => 'icon-link', 'spanClass' => 'color-black text-bold gien'])
+	@button(['link' => '#', 'label'=>'Preview', 'icon'=>'preview', 'iconClasses'=>'color-black', 'attr'=>arrayToHtmlAttributes(['data-post-preview' => '', 'data-toggle' => 'modal', 'data-target' => '#toolModal', 'data-url' => route($module.'.preview', ['id' => $data->id]).'#platform-mobile']), 'class' => 'icon-link', 'spanClass' => 'color-black text-bold'])
 </li>
 @endif
 <li>

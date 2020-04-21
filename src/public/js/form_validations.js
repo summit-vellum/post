@@ -4,6 +4,11 @@ $(document).ready(function(){
 		$('#toolModal').find('.modal-dialog').css('width', '1280px');
 	});
 
+	$(document).on('click', function() {
+		($('[flash-message]').length) ? $('[btn-post-save]').removeClass('hide') : '';
+		$('[flash-message]').remove();
+	});
+
 	/* fields validation */
 	$('.post-submit').on('click', function(e){
 		var
@@ -57,7 +62,13 @@ $(document).ready(function(){
             }
 		});
 
-		var postStatus = (typeof($(this).data('status')) !== 'undefined') ? $(this).data('status') : $('input[id="status"]').val();
+		var postStatus = (typeof($(this).data('status')) !== 'undefined') ? $(this).data('status') : $('input[id="status"]').val(),
+			onEditForm = (typeof($(this).data('status')) == 'undefined') ? true : false;
+
+		if (onEditForm) {
+			$('[btn-post-save]').addClass('hide');
+			$('[data-post-loader]').removeClass('hide');
+		}
 
 		if (!required && postStatus != 2) {
 			$('input[name="status"]').val(postStatus);

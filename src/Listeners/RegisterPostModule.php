@@ -19,6 +19,7 @@ class RegisterPostModule
             'title' => 'Post',
             'class' => 'font-xl text-blue-500',
             'model' => \Quill\Post\Models\Post::class,
+            'overrideModule' => 'article',
             'module' => 'Post',
             'navHeader' => [
             	'left' => 'Content',

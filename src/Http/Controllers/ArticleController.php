@@ -30,6 +30,7 @@ class PostController extends Controller
     {
     	$id = $request->get('id');
     	$post = $this->resource->findById($id);
-    	return view('post::preview', ['link' => $post->url]);
+    	$link = isset($post->url) ? $post->url : '';
+    	return view('post::preview', ['link' => $link]);
     }
 }

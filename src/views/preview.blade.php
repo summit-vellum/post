@@ -11,10 +11,10 @@
 @section('content')
 <div class="preview">
 	<div class="preview-platform preview-mobile" id="platform-mobile">
-		<iframe src="{{ $link }}?preview=1&device=mobile" height="100%" frameborder="0" width="100%" class="full-height"></iframe>
+		<iframe src="{{ ($link) ? $link.'?preview=1&device=mobile' : '' }}" height="100%" frameborder="0" width="100%" class="full-height"></iframe>
 	</div>
 	<div class="preview-platform preview-desktop" id="platform-desktop">
-        <iframe src="{{ $link }}?preview=1&device=desktop" height="100%" frameborder="0" width="100%" class="full-height"></iframe>
+        <iframe src="{{ ($link) ? $link.'?preview=1&device=desktop' : '' }}" height="100%" frameborder="0" width="100%" class="full-height"></iframe>
     </div>
 </div>
 @endsection

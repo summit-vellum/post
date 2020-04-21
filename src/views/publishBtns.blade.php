@@ -1,8 +1,8 @@
 <li>
 	@php
-		$hide = (isset($data) && !empty($data)) ? '' : 'hide';
-		$hide = (Session::has('flash_message')) ? 'hide' : '';
+		$hide = (Session::get('flash_message') || empty($data)) ? 'hide' : '';
 	@endphp
+
 	@if(Session::has('flash_message'))
     <div class="mt-3" flash-message><em>{{ Session::get('flash_message') }}</em></div>
     @endif

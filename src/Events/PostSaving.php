@@ -52,7 +52,7 @@ class PostSaving
 		event(new PostPublished([
     		'title'=> $data->title,
     		'author'=> auth()->user()->display_name,
-    		'url' => config('site.protocol').config('site.domain').'/'.$data->section->url.$data->slug
+    		'url' => $data->url
     	]));
     }
 

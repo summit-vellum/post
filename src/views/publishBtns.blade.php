@@ -5,7 +5,7 @@
 </li>
 @if(isset($data) && !empty($data))
 <li>
-	@button(['link' => '#', 'label'=>'Preview', 'icon'=>'preview', 'iconClasses'=>'color-black', 'attr'=>arrayToHtmlAttributes(['data-toggle' => 'modal', 'data-target' => '#toolModal', 'data-url' => url($module.'/'.$data->id)]), 'class' => 'icon-link', 'spanClass' => 'color-black text-bold'])
+	@button(['link' => '#', 'label'=>'Preview', 'icon'=>'preview', 'iconClasses'=>'color-black', 'attr'=>arrayToHtmlAttributes(['data-post-preview' => '', 'data-toggle' => 'modal', 'data-target' => '#toolModal', 'data-url' => route($module.'.preview', ['id' => $data->id]).'#platform-mobile']), 'class' => 'icon-link', 'spanClass' => 'color-black text-bold gien'])
 </li>
 @endif
 <li>

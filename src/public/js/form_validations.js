@@ -1,4 +1,9 @@
 $(document).ready(function(){
+
+	$('[data-post-preview]').on('click', function(e){
+		$('#toolModal').find('.modal-dialog').css('width', '1280px');
+	});
+
 	/* fields validation */
 	$('.post-submit').on('click', function(e){
 		var

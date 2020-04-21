@@ -2,6 +2,7 @@
 
 namespace Quill\Post\Actions;
 
+use Illuminate\Support\Facades\Route;
 use Vellum\Actions\BaseAction;
 use Vellum\Contracts\Actionable;
 
@@ -14,7 +15,8 @@ class PreviewAction extends BaseAction implements Actionable
 
     public function link($id, $data = [])
     {
-        return '#';
+        $module = explode('.', Route::current()->getName())[0];
+        return route($module . '.show', $id);
     }
 
     public function styles()
@@ -43,9 +45,14 @@ class PreviewAction extends BaseAction implements Actionable
 
     public function attributes($data = [])
     {
-        return [
-
+    	$attributes = [];
+    	$attributes = [
+            'data-toggle' => 'modal',
+            'data-target' => '#toolModal',
+            'data-url' => ''
         ];
+
+        return $attributes;
     }
 
     public function tooltip()

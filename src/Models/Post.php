@@ -21,7 +21,12 @@ class Post extends BaseModel
 {
     protected $table = 'posts';
 
-    protected $appends = ['author', 'tags_list', 'visible_tags_list', 'invisible_tags_list', 'serialized_seo_topic', 'status_icon', 'is_published_later','author_names'];
+    protected $appends = ['author', 'tags_list', 'visible_tags_list', 'invisible_tags_list', 'serialized_seo_topic', 'status_icon', 'is_published_later','author_names', 'url'];
+
+    public function getUrlAttribute()
+    {
+    	return isset($this->section) ? config('site.protocol').config('site.domain').'/'.$this->section->url.$this->attributes['slug'] : '';
+    }
 
     public function getIsPublishedLaterAttribute()
     {

@@ -65,12 +65,12 @@ $(document).ready(function(){
 		var postStatus = (typeof($(this).data('status')) !== 'undefined') ? $(this).data('status') : $('input[id="status"]').val(),
 			onEditForm = (typeof($(this).data('status')) == 'undefined') ? true : false;
 
-		if (onEditForm) {
-			$('[btn-post-save]').addClass('hide');
-			$('[data-post-loader]').removeClass('hide');
-		}
-
 		if (!required && postStatus != 2) {
+			if (onEditForm) {
+				$('[btn-post-save]').addClass('hide');
+				$('[data-post-loader]').removeClass('hide');
+			}
+
 			$('input[name="status"]').val(postStatus);
 
 			if ($(this).data('publish') == 'now') {
@@ -78,10 +78,13 @@ $(document).ready(function(){
             }
 
             $("#form-post").submit();
-		} else {
-			$('[post-satus-btn]').click();
 		}
 	});
+
+	$('[btn-post-disable]').on('click', function(e){
+		$('[post-satus-btn]').click();
+	});
+
 
 	var isPublished = $('#is_published').val(),
 		uneditableFields = $('#uneditable_fields').val();

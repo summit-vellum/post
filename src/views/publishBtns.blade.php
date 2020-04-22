@@ -72,6 +72,7 @@
                 		$subText = isset($deleteDialogNotif['valueDisplayedIn']['preSubText']) ? $deleteDialogNotif['valueDisplayedIn']['preSubText'].' '.$subText : $subText;
                 	@endphp
                 	@button(['element'=>'button', 'label'=>'Disable', 'class'=>'btn btn-danger btn-block '.$module.'-submit', 'attr'=>arrayToHtmlAttributes([
+                								   'btn-post-disable' => '',
                 								   'data-status' => $status[2]['id'],
                 								   'data-toggle' => 'modal',
                 								   'data-target' => '#deleteResourceDialog',

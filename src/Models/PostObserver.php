@@ -25,6 +25,7 @@ class PostObserver extends BaseController
     public function created(Post $post)
     {
     	$post->activity_code = $this->activity_code['created'];
+
         event(new PostCreated($post));
     }
 
@@ -35,6 +36,26 @@ class PostObserver extends BaseController
 
     public function saved(Post $post)
     {
+        if ($post->isDirty('status')) {
+            if ($post->status == Status::PUBLISH) {
+                if ($post->date_published > time()) {
+                    $post->activity_code = $this->activity_code['set_as_publish_later'];
+                } else {
+                	$post->activity_code = $this->activity_code['published'];
+                }
+            } else if($post->status == Status::DRAFT) {
+            	if (request()->get('id') == null) {
+            		$post->activity_code = $this->activity_code['edited'];
+            	} else {
+            		$post->activity_code = $this->activity_code['set_back_as_draft'];
+            	}
+            } if ($post->status == Status::DISABLE) {
+                $post->activity_code = $this->activity_code['disabled'];
+            }
+     	} else {
+     		$post->activity_code = $this->activity_code['edited'];
+     	}
+
         event(new PostSaved($post));
     }
 
@@ -45,7 +66,6 @@ class PostObserver extends BaseController
 
     public function updated(Post $post)
     {
-    	$post->activity_code = $this->activity_code['edited'];
         event(new PostUpdated($post));
     }
 

@@ -21,7 +21,7 @@ return [
 			'preSubText' => 'by:',
 			'subText' => 'author_names'
 		],
-		'dismiss' => 'Cancel',
-		'continue' => 'Yes, Delete this article'
+		'dismiss' => 'Cancel and go back to dashboard',
+		'continue' => 'Continue and disable this article'
     ]
 ];

@@ -1,3 +1,12 @@
+@section('dialogBoxes')
+@dialog([
+			'id' => 'removeImage',
+			'header' => 'Are you sure you want to delete this image? You will no longer be able to use this after it has been deleted.',
+			'dismissText' => 'Cancel',
+			'continueText' => 'Continue',
+			'dialogTitleClass' => 'hide'
+		])
+@endsection
 <div class="container">
 	<input type="hidden" id="post_config" value="{{ json_encode($site) }}">
 	<div class="container px-0 container-max-width">
